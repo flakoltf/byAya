@@ -49,6 +49,8 @@ const Footer = () => {
               <li><Link to="/profile" className="hover:text-primary transition-colors">Mon Compte</Link></li>
               <li><Link to="/diagnostic" className="hover:text-primary transition-colors">Diagnostic Capillaire</Link></li>
               <li><Link to="/contact" className="hover:text-primary transition-colors">Livraison & Retours</Link></li>
+              <li><Link to="/privacy" className="hover:text-primary transition-colors">Politique de confidentialité</Link></li>
+              <li><Link to="/terms" className="hover:text-primary transition-colors">Conditions Générales</Link></li>
             </ul>
           </div>
 

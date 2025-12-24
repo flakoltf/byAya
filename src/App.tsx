@@ -11,7 +11,10 @@ import Orders from './pages/Orders';
 import Checkout from './pages/Checkout';
 import Contact from './pages/Contact';
 import About from './pages/About';
-import Diagnostic from './pages/Diagnostic'
+import Diagnostic from './pages/Diagnostic';
+import CookieBanner from './components/CookieBanner';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProducts from './pages/AdminProducts';
@@ -41,6 +44,8 @@ function App() {
             <Route path="/contact" element={<Contact/>} />
             <Route path="/about" element={<About/>} />
             <Route path="/diagnostic" element={<Diagnostic/>} />
+            <Route path="/privacy" element={<Privacy/>} />
+            <Route path="/terms" element={<Terms />} />
            {/* --- ROUTES ADMIN (Protégées par AdminRoute) --- */}
             {/* On enveloppe chaque page admin pour vérifier le rôle de l'utilisateur */}
             <Route path="/admin" element={
@@ -61,6 +66,9 @@ function App() {
           </Routes>
         </main>
         <Footer />
+
+        <CookieBanner />
+
       </div>
     </CartProvider>
   );
