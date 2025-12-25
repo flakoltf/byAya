@@ -3,7 +3,6 @@ import {
   EnvelopeIcon, 
   PhoneIcon, 
   MapPinIcon, 
-  ChatBubbleLeftRightIcon,
   CheckCircleIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline';

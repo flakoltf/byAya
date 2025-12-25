@@ -10,7 +10,8 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Cart = () => {
-  const { cart, removeFromCart, addToCart, decreaseQuantity } = useCart(); // Assure-toi d'avoir une fonction pour baisser la quantité
+  // Correction ici : on utilise bien toutes les fonctions extraites
+  const { cart, removeFromCart, addToCart, decreaseQuantity } = useCart(); 
   const navigate = useNavigate();
 
   const totalPrice = cart.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
@@ -50,7 +51,6 @@ const Cart = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* LISTE DES ARTICLES (8/12) */}
           <div className="lg:col-span-8 space-y-6">
             {cart.map((item: any) => (
               <div key={item.id} className="group bg-white rounded-[2rem] shadow-sm border border-primary/5 overflow-hidden transition-all hover:shadow-md">
@@ -64,11 +64,23 @@ const Cart = () => {
                       <h3 className="font-serif italic text-xl text-[#5D4037]">{item.name}</h3>
                       <p className="text-primary font-black text-sm uppercase tracking-widest">{item.price.toFixed(2)} CHF</p>
                       
-                      {/* Contrôle Quantité Style Luxe */}
                       <div className="flex items-center gap-6 mt-6 bg-[#FAF9F6] w-fit mx-auto md:mx-0 rounded-xl px-4 py-2 border border-primary/5">
-                        <button onClick={() => removeFromCart(item.id)} className="text-primary hover:scale-125 transition-transform"><MinusIcon className="w-4 h-4"/></button>
+                        {/* Correction ici : Utilisation de decreaseQuantity au lieu de removeFromCart */}
+                        <button 
+                          onClick={() => decreaseQuantity(item.id)} 
+                          className="text-primary hover:scale-125 transition-transform"
+                        >
+                          <MinusIcon className="w-4 h-4"/>
+                        </button>
+                        
                         <span className="font-black text-sm text-[#5D4037] w-4 text-center">{item.quantity}</span>
-                        <button onClick={() => addToCart(item)} className="text-primary hover:scale-125 transition-transform"><PlusIcon className="w-4 h-4"/></button>
+                        
+                        <button 
+                          onClick={() => addToCart(item)} 
+                          className="text-primary hover:scale-125 transition-transform"
+                        >
+                          <PlusIcon className="w-4 h-4"/>
+                        </button>
                       </div>
                     </div>
 
@@ -84,7 +96,6 @@ const Cart = () => {
             ))}
           </div>
 
-          {/* RÉCAPITULATIF (4/12) */}
           <div className="lg:col-span-4">
             <div className="bg-white rounded-[2.5rem] shadow-2xl border border-primary/5 p-8 md:p-10 sticky top-28">
               <h2 className="text-2xl font-black italic mb-8 text-[#5D4037] border-b border-primary/5 pb-4">Résumé</h2>
@@ -125,7 +136,6 @@ const Cart = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
