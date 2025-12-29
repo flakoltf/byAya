@@ -10,18 +10,39 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Cart = () => {
-  // Correction ici : on utilise bien toutes les fonctions extraites
   const { cart, removeFromCart, addToCart, decreaseQuantity } = useCart(); 
   const navigate = useNavigate();
 
   const totalPrice = cart.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
 
   const handleCheckoutClick = async () => {
+    // 1. Vérifier si l'utilisateur est connecté
     const { data: { session } } = await supabase.auth.getSession();
+    
     if (!session) {
       navigate('/login', { state: { from: '/cart' } });
-    } else {
-      navigate('/checkout'); 
+      return;
+    }
+
+    try {
+      // 2. Appeler la Edge Function Supabase pour créer la session Stripe
+      // On envoie le contenu du panier (cart) et l'email de l'utilisateur
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: { 
+          cartItems: cart, 
+          userEmail: session.user.email 
+        },
+      });
+
+      if (error) throw error;
+
+      // 3. Rediriger vers la page de paiement sécurisée de Stripe
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Erreur lors de l'initialisation du paiement:", err);
+      alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
 
@@ -65,7 +86,6 @@ const Cart = () => {
                       <p className="text-primary font-black text-sm uppercase tracking-widest">{item.price.toFixed(2)} CHF</p>
                       
                       <div className="flex items-center gap-6 mt-6 bg-[#FAF9F6] w-fit mx-auto md:mx-0 rounded-xl px-4 py-2 border border-primary/5">
-                        {/* Correction ici : Utilisation de decreaseQuantity au lieu de removeFromCart */}
                         <button 
                           onClick={() => decreaseQuantity(item.id)} 
                           className="text-primary hover:scale-125 transition-transform"

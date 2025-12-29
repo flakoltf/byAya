@@ -15,6 +15,8 @@ import Diagnostic from './pages/Diagnostic';
 import CookieBanner from './components/CookieBanner';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import Success from './pages/Sucess';
+import ServiceStripe from './services/stripeService';
 
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProducts from './pages/AdminProducts';
@@ -46,6 +48,9 @@ function App() {
             <Route path="/diagnostic" element={<Diagnostic/>} />
             <Route path="/privacy" element={<Privacy/>} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/sucess" element={<Success />} />
+            <Route path="/services" element={<ServiceStripe />} />
+
            {/* --- ROUTES ADMIN (Protégées par AdminRoute) --- */}
             {/* On enveloppe chaque page admin pour vérifier le rôle de l'utilisateur */}
             <Route path="/admin" element={
