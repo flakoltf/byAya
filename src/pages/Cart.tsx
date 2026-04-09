@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { 
   ShoppingBagIcon, 
-  TrashIcon, 
   PlusIcon, 
   MinusIcon,
   ShieldCheckIcon 
@@ -25,7 +24,8 @@ const Cart = () => {
 
     try {
       // APPEL AU PORT 8080 (Pour éviter le conflit AirPlay du port 5000)
-      const response = await fetch('http://127.0.0.1:8080/create-checkout-session', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+      const response = await fetch(`${API_URL}/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

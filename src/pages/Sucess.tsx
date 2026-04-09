@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   CheckBadgeIcon, 
-  ShoppingBagIcon, 
   ArrowRightIcon 
 } from '@heroicons/react/24/outline';
 import { useCart } from '../context/CartContext';

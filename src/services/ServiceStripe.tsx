@@ -1,9 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { loadStripe, type Stripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { 
   SparklesIcon, 
-  ShieldCheckIcon, 
-  ArrowRightIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
 
@@ -13,7 +10,6 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const ServiceStripe = () => {
-  const navigate = useNavigate();
 
   // 2. FONCTION DE PAIEMENT (La logique pro)
   const handleStripePayment = async (): Promise<void> => {
