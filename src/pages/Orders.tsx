@@ -92,7 +92,7 @@ const Orders = () => {
                       <div>
                         <div className="flex items-center gap-3 mb-1">
                           <span className="text-[10px] font-black uppercase tracking-widest text-primary opacity-40">
-                            Réf. {order.id.slice(0, 8).toUpperCase()}
+                            Réf. COM-{order.id.toString().padStart(4, '0')}
                           </span>
                           <div className={`px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${getStatusStyle(order.status)}`}>
                             {order.status}
