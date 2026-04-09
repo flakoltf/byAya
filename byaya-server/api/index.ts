@@ -22,9 +22,12 @@ const supabase = (supabaseAdminUrl && supabaseServiceKey)
 
 const app = express();
 
-const ALLOWED_ORIGINS = process.env.NODE_ENV === 'production' 
-  ? ['https://byaya.ch', 'https://www.byaya.ch'] 
-  : ['http://localhost:5173', 'http://127.0.0.1:5173'];
+const ALLOWED_ORIGINS = [
+  'https://byaya.ch', 
+  'https://www.byaya.ch',
+  'http://localhost:5173', 
+  'http://127.0.0.1:5173'
+];
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -32,7 +35,8 @@ app.use(cors({
     if (ALLOWED_ORIGINS.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // Return false instead of Error pour ne pas faire crasher le Preflight OPTIONS
+      callback(null, false); 
     }
   },
   credentials: true
