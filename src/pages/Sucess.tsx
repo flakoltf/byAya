@@ -1,12 +1,20 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   CheckBadgeIcon, 
   ShoppingBagIcon, 
   ArrowRightIcon 
 } from '@heroicons/react/24/outline';
+import { useCart } from '../context/CartContext';
 
 const Success = () => {
   const navigate = useNavigate();
+  const { clearCart } = useCart();
+
+  useEffect(() => {
+    // Nettoyer le panier après un paiement ou une réservation Stripe réussie
+    clearCart();
+  }, [clearCart]);
 
   return (
     <div className="bg-[#FAF9F6] min-h-screen flex items-center justify-center py-20 px-4">

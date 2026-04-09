@@ -15,8 +15,10 @@ import Diagnostic from './pages/Diagnostic';
 import CookieBanner from './components/CookieBanner';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
-import Success from './pages/Sucess';
-import ServiceStripe from './services/stripeService';
+import Success from './pages/Sucess'; // On garde ton fichier actuel
+
+// CORRECTION : Import avec accolades pour ServiceStripe
+import { ServiceStripe } from './services/ServiceStripe';
 
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProducts from './pages/AdminProducts';
@@ -24,12 +26,10 @@ import AdminOrders from './pages/AdminOrders';
 import AdminStats from './pages/AdminStats';
 import AdminRoute from './components/AdminRoute';
 
-// IMPORTANT : Importe le Provider que nous avons créé
 import { CartProvider } from './context/CartContext';
 
 function App() {
   return (
-    // On enveloppe TOUT le contenu dans le CartProvider
     <CartProvider>
       <div className="flex flex-col min-h-screen bg-base-100">
         <Navbar />
@@ -48,11 +48,14 @@ function App() {
             <Route path="/diagnostic" element={<Diagnostic/>} />
             <Route path="/privacy" element={<Privacy/>} />
             <Route path="/terms" element={<Terms />} />
+            
+            {/* On s'assure que le path correspond à ce qu'on a mis dans le backend */}
+            <Route path="/success" element={<Success />} /> 
             <Route path="/sucess" element={<Success />} />
+            
             <Route path="/services" element={<ServiceStripe />} />
 
-           {/* --- ROUTES ADMIN (Protégées par AdminRoute) --- */}
-            {/* On enveloppe chaque page admin pour vérifier le rôle de l'utilisateur */}
+           {/* --- ROUTES ADMIN --- */}
             <Route path="/admin" element={
               <AdminRoute><AdminDashboard /></AdminRoute>
             } />
@@ -71,9 +74,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
-
         <CookieBanner />
-
       </div>
     </CartProvider>
   );

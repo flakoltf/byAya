@@ -62,11 +62,21 @@ const Checkout = () => {
       return;
     }
 
+    if (cart.length === 0) {
+      alert("Votre panier est vide.");
+      return;
+    }
+
+    // VÉRIFICATION D'ACHAT MINIMUM (20 CHF MINIMUM)
+    if (totalPrice < 20) {
+      alert("Le montant minimum de commande est de 20 CHF hors frais.");
+      return;
+    }
+
     setLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
-      // Sauvegarde de l'adresse (Upsert)
       await supabase.from('billing_addresses').upsert({
         user_id: user?.id,
         full_name: billingAddress.fullName,
@@ -74,12 +84,12 @@ const Checkout = () => {
         zip: billingAddress.zip,
         city: billingAddress.city,
         country: billingAddress.country,
-        mailbox_name: billingAddress.mailboxName // On renvoie mailbox_name à la DB
+        mailbox_name: billingAddress.mailboxName
       }, { onConflict: 'user_id' });
 
+      // ---- 1. CRÉATION COMMANDE (Statut "en attente") ----
       const fullAddr = `${billingAddress.street}, ${billingAddress.zip} ${billingAddress.city}, ${billingAddress.country}`;
 
-      // Création de la commande
       const { data: order, error: orderErr } = await supabase.from('orders').insert({
         user_id: user?.id,
         total_price: totalPrice,
@@ -90,6 +100,29 @@ const Checkout = () => {
 
       if (orderErr) throw orderErr;
 
+      // ---- 2. CARTE BANCAIRE -> REDIRECTION STRIPE ----
+      if (paymentMethod === 'card') {
+         const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+         const response = await fetch(`${API_URL}/create-checkout-session`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                items: cart, 
+                email: user?.email,
+                orderId: order.id  // ON FOURNIT L'ID À NOTRE SERVEUR !
+            })
+         });
+         
+         const session = await response.json();
+         if (session.url) {
+            window.location.href = session.url; 
+            return;
+         } else {
+            throw new Error(session.error || "Erreur bancaire");
+         }
+      }
+
+      // ---- 3. FLUX TWINT & CARTE -> FINALISATION DE LA COMMANDE EN ATTENTE ----
       // Ajout des articles
       const orderItems = cart.map(item => ({
         order_id: order.id,
@@ -102,7 +135,7 @@ const Checkout = () => {
       await supabase.from('order_items').insert(orderItems);
       
       clearCart();
-      alert(`Merci ! Votre commande ByAya est validée.`);
+      alert(`Merci ! Veuillez procéder au versement TWINT.`);
       navigate('/orders');
     } catch (err) {
       console.error(err);
