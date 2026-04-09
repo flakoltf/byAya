@@ -27,7 +27,14 @@ const ALLOWED_ORIGINS = process.env.NODE_ENV === 'production'
   : ['http://localhost:5173', 'http://127.0.0.1:5173'];
 
 app.use(cors({
-  origin: ALLOWED_ORIGINS, 
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 

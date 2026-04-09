@@ -23,8 +23,8 @@ const Cart = () => {
     }
 
     try {
-      // APPEL AU PORT 8080 (Pour éviter le conflit AirPlay du port 5000)
-      const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+      // APPEL RESILIENT (Au cas où il y a un / à la fin de l'URL)
+      const API_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000').replace(/\/$/, '');
       const response = await fetch(`${API_URL}/create-checkout-session`, {
         method: 'POST',
         headers: {
